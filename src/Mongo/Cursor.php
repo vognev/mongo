@@ -4,7 +4,6 @@ namespace Mongo;
 use \Iterator;
 use \MongoCursor;
 
-
 class Cursor implements Iterator
 {
     public $cursor;

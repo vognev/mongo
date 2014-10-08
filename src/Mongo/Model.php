@@ -3,8 +3,6 @@
 namespace Mongo;
 
 /**
- * Class Model
- * @package mongodb
  * @property mixed $_id
  *
  * @method static array         aggregate       ( array $pipeline, array $options = null )
@@ -73,28 +71,18 @@ abstract class Model implements \ArrayAccess
         $this->offsetUnset($offset);
     }
 
-    // defined in future database class
     protected static $_connection = 'default';
 
-    // collection name of this model
     protected static $_collection = 'sessions';
 
     const ASCENDING         = 1 ;
     const DESCENDING        = -1 ;
 
-    /**
-     * static call behaves as collection call
-     * @param $method
-     * @param $parameters
-     * @return mixed|Cursor
-     */
     public static function __callStatic($method, $parameters)
     {
-        // Convert results if possible
         $results = call_user_func_array(array(static::collection(), $method), $parameters);
         if ($results instanceof \MongoCursor)
             $results = new Cursor($results, get_called_class(), $method);
-
         return $results;
     }
 
@@ -111,13 +99,10 @@ abstract class Model implements \ArrayAccess
     }
 
     public static function persist(Model $model) {
-
         $a = $model->toArray();
-
         self::collection()->save($a, array(
             'safe' => true
         ));
-
         $model->_id = $a['_id'];
     }
 

@@ -3,8 +3,6 @@
 namespace Mongo\Session;
 
 /**
- * Class Model
- * @package session
  * @property int $lifetime
  * @property int $created
  * @property int $updated
