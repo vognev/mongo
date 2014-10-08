@@ -1,8 +1,8 @@
 <?php
 namespace Mongo;
 
-use Iterator;
-use MongoCursor;
+use \Iterator;
+use \MongoCursor;
 
 
 class Cursor implements Iterator
