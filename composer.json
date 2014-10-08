@@ -1,5 +1,5 @@
 {
-  "name": "vognev/Mongo",
+  "name": "vognev/mongo",
   "description": "another MongoDB wrapper",
   "keywords": ["MongoDB", "wrapper"],
   "type": "library",
