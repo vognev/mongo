@@ -17,6 +17,6 @@
     "phpunit/phpunit": "4.3.1"
   },
   "autoload": {
-    "psr-0": { "Mongo/": "src/" }
+    "psr-0": { "Mongo": "src/" }
   }
 }
