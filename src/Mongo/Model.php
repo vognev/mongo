@@ -9,7 +9,6 @@ namespace Mongo;
  * @method static int           count           (array $query = array(), int $limit = 0, int $skip = 0)
  * @method static Cursor        find            (array $query = array(), array $fields = array() )
  * @method static array         findAndModify   ( array $query, array $update, array $fields, array $options )
- * @method static array         findOne         (array $query = array(), array $fields = array(), array $options = array() )
  * @methid static array         group           ( mixed $keys , array $initial , MongoCode $reduce, array $options = array() )
  * @method static bool|array    insert          ( mixed $a, array $options = array() )
  * @method static bool|array    remove          (array $criteria = array(), array $options = array() )
@@ -88,10 +87,14 @@ abstract class Model implements \ArrayAccess
     }
 
     public static function load($id) {
-        $found = self::collection()->findOne(array(
+        return static::findOne(array(
             '_id' => $id
         ));
-        return null === $found ? null : static::create($found);
+    }
+
+    public static function findOne(array $query = array(), array $fields = array(), array $options = array()) {
+        $found = static::collection()->findOne($query, $fields, $options);
+        return $found ? new static($found) : null;
     }
 
     public static function create(array $attributes = array())
@@ -101,14 +104,14 @@ abstract class Model implements \ArrayAccess
 
     public static function persist(Model $model) {
         $a = $model->toArray();
-        self::collection()->save($a, array(
+        static::collection()->save($a, array(
             'safe' => true
         ));
         $model->_id = $a['_id'];
     }
 
     public static function delete($modelOrId) {
-        self::collection()->remove(array(
+        static::collection()->remove(array(
             '_id' => ($modelOrId instanceof Model) ? $modelOrId->_id : $modelOrId
         ));
     }
@@ -118,8 +121,8 @@ abstract class Model implements \ArrayAccess
      */
     public static function collection()
     {
-        $db = Connection::get(self::$_connection);
-        return $db->{self::$_collection};
+        $db = Connection::get(static::$_connection);
+        return $db->{static::$_collection};
     }
 
 }
