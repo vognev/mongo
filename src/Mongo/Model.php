@@ -29,12 +29,13 @@ abstract class Model implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        return array_key_exists($this->_attributes, $offset);
+        return array_key_exists($offset, $this->_attributes);
     }
 
     public function offsetGet($offset)
     {
-        return $this->_attributes[$offset];
+        if ($this->offsetExists($offset))
+            return $this->_attributes[$offset];
     }
 
     public function offsetSet($offset, $value)
