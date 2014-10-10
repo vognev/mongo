@@ -2,14 +2,14 @@
 
 namespace Mongo\Session;
 
-/**
- * @property int $lifetime
- * @property int $created
- * @property int $updated
- * @property int $expires
- * @property string $data
- */
 class Model extends \Mongo\Model {
+
+    public $lifetime;
+    public $created;
+    public $updated;
+    public $expires;
+    public $data;
+
     public function isExpired() {
         $lifetime   = ini_get('session.gc_maxlifetime');
         $invoked    = time();

@@ -3,8 +3,6 @@
 namespace Mongo;
 
 /**
- * @property mixed $_id
- *
  * @method static array         aggregate       ( array $pipeline, array $options = null )
  * @method static int           count           (array $query = array(), int $limit = 0, int $skip = 0)
  * @method static Cursor        find            (array $query = array(), array $fields = array() )
@@ -15,60 +13,39 @@ namespace Mongo;
  * @method static mixed         save            ( mixed $a, array $options = array() )
  * @method bool|array           update          ( array $criteria , array $new_object, array $options = array() )
  */
-abstract class Model implements \ArrayAccess
+abstract class Model
 {
 
-    // object methods are modl-level
-    protected $_attributes;
+    /**
+     * @var mixed model identifier
+     */
+    public $_id;
 
     public function __construct(array $attributes = array())
     {
-        $this->_attributes = $attributes;
+        foreach($attributes as $name => $attribute)
+            $this->$name = $attribute;
     }
 
-    public function offsetExists($offset)
-    {
-        return array_key_exists($offset, $this->_attributes);
+    public function __set($name, $value) {
+        $setter = 'set' . ucfirst($name);
+        if (method_exists($this, $setter))
+            return $this->$setter($value);
+        throw new \Exception(sprintf('The setter "%s" does not exists in "%s"', $setter, get_called_class()));
     }
 
-    public function offsetGet($offset)
-    {
-        if ($this->offsetExists($offset))
-            return $this->_attributes[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->_attributes[$offset] = $value;
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->_attributes[$offset]);
+    public function __get($name) {
+        $getter = 'get' . ucfirst($name);
+        if (method_exists($this, $getter))
+            return $this->$getter();
+        throw new \Exception(sprintf('The getter "%s" does not exists in "%s"', $getter, get_called_class()));
     }
 
     public function toArray()
     {
-        return @array_filter($this->_attributes, function ($value) {
+        return @array_filter(get_object_vars($this), function ($value) {
             return $value !== null;
         });
-    }
-
-    // convenient magic methods
-    function __set($offset, $value) {
-        $this->offsetSet($offset, $value);
-    }
-
-    function __get($offset) {
-        return $this->offsetGet($offset);
-    }
-
-    function __isset($offset) {
-        return $this->offsetExists($offset);
-    }
-
-    function __unset($offset) {
-        $this->offsetUnset($offset);
     }
 
     protected static $_connection = 'default';
