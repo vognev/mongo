@@ -87,9 +87,9 @@ abstract class Model
         $model->_id = $a['_id'];
     }
 
-    public static function delete($modelOrId) {
+    public static function delete(Model $model) {
         static::collection()->remove(array(
-            '_id' => ($modelOrId instanceof Model) ? $modelOrId->_id : $modelOrId
+            '_id' => $model->_id
         ));
     }
 

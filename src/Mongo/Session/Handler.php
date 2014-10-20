@@ -23,7 +23,7 @@ class Handler implements \SessionHandlerInterface
 
     public function destroy($session_id)
     {
-        Session::delete($session_id);
+        Session::delete(Session::load($session_id));
         return true;
     }
 
