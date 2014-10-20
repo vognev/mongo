@@ -41,7 +41,7 @@ class Cursor implements Iterator
         }
         else {
             $class = $this->class;
-            return new $class($this->cursor->current());
+            return $class::create($this->cursor->current());
         }
     }
 

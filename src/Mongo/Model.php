@@ -71,7 +71,7 @@ abstract class Model
 
     public static function findOne(array $query = array(), array $fields = array(), array $options = array()) {
         $found = static::collection()->findOne($query, $fields, $options);
-        return $found ? new static($found) : null;
+        return $found ? static::create($found) : null;
     }
 
     public static function create(array $attributes = array())
@@ -82,7 +82,7 @@ abstract class Model
     public static function persist(Model $model) {
         $a = $model->toArray();
         static::collection()->save($a, array(
-            'safe' => true
+            'w' => 1
         ));
         $model->_id = $a['_id'];
     }
