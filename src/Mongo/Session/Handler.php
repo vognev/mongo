@@ -23,7 +23,7 @@ class Handler implements \SessionHandlerInterface
 
     public function destroy($session_id)
     {
-        $session = Session::load(new \MongoId($session_id));
+        $session = Session::load($session_id);
         $session && Session::delete($session);
         return true;
     }
