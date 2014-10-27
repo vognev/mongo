@@ -69,8 +69,8 @@ abstract class Model
         ));
     }
 
-    public static function findOne(array $query = array(), array $fields = array(), array $options = array()) {
-        $found = static::collection()->findOne($query, $fields, $options);
+    public static function findOne(array $query = array(), array $options = array()) {
+        $found = static::collection()->findOne($query, $options);
         return $found ? static::create($found) : null;
     }
 
