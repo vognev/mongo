@@ -21,6 +21,12 @@ abstract class Model
      */
     public $_id;
 
+    public function assign($attributes) {
+        foreach($attributes as $name => $value)
+            if ('_id' !== $name && property_exists($this, $name))
+                $this->$name = $value;
+    }
+
     public function __construct(array $attributes = array())
     {
         foreach($attributes as $name => $attribute)
