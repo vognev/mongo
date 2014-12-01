@@ -22,9 +22,14 @@ abstract class Model
     public $_id;
 
     public function assign($attributes) {
-        foreach($attributes as $name => $value)
-            if ('_id' !== $name && property_exists($this, $name))
+        foreach($attributes as $name => $value) {
+            if ('_id' !== $name)
+            if (property_exists($this, $name)) {
                 $this->$name = $value;
+            } elseif (method_exists($this, $setter = ('set' . ucfirst($name)))) {
+                $this->$setter($value);
+            }
+        }
     }
 
     public function __construct(array $attributes = array())
