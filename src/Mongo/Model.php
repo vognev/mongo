@@ -21,21 +21,22 @@ abstract class Model
      */
     public $_id;
 
+    public function __construct(array $attributes = array())
+    {
+        if (array_key_exists('_id', $attributes))
+            $this->_id = $attributes['_id'];
+        $this->assign($attributes);
+    }
+
     public function assign($attributes) {
         foreach($attributes as $name => $value) {
             if ('_id' !== $name)
-            if (property_exists($this, $name)) {
-                $this->$name = $value;
-            } elseif (method_exists($this, $setter = ('set' . ucfirst($name)))) {
-                $this->$setter($value);
-            }
+                if (property_exists($this, $name)) {
+                    $this->$name = $value;
+                } elseif (method_exists($this, $setter = ('set' . ucfirst($name)))) {
+                    $this->$setter($value);
+                }
         }
-    }
-
-    public function __construct(array $attributes = array())
-    {
-        foreach($attributes as $name => $attribute)
-            $this->$name = $attribute;
     }
 
     public function __set($name, $value) {
